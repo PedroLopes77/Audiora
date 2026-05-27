@@ -2,6 +2,7 @@ using Audiora.Application.DTOs.Request;
 using Audiora.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Audiora.API.Controllers;
 
@@ -54,8 +55,30 @@ public class MusicController : ControllerBase
     [Authorize(Roles = "Artist,Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await _musicService.DeleteAsync(id, userId);
         return result.Success ? Ok(result) : NotFound(result);
+    }
+
+    [HttpPost("upload")]
+    [Authorize(Roles = "Artist,Admin")]
+    public async Task<IActionResult> Upload(
+        [FromForm] CreateMusicRequest request,
+        IFormFile audioFile,
+        IFormFile? coverImage,
+        [FromServices] IStorageService storageService)
+    {
+        var audioUrl = await storageService.SaveAudioAsync(
+            audioFile.OpenReadStream(), audioFile.FileName);
+        request.AudioUrl = audioUrl;
+
+        if (coverImage != null)
+            request.CoverImageUrl = await storageService.SaveImageAsync(
+                coverImage.OpenReadStream(), coverImage.FileName);
+
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await _musicService.CreateAsync(request, userId);
+
+        return result.Success ? Ok(result) : BadRequest(result);
     }
 }

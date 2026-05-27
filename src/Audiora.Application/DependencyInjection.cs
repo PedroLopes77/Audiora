@@ -9,12 +9,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        // AutoMapper
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
-
-        // FluentValidation — registra todos os validators do assembly
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
         return services;
     }
 }

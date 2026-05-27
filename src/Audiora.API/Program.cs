@@ -86,4 +86,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 Log.Information("Audiora API iniciada com sucesso!");
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50MB
+});
 app.Run();

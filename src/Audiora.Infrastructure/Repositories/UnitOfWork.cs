@@ -9,21 +9,25 @@ public class UnitOfWork : IUnitOfWork
 
     public IUserRepository Users { get; }
     public IMusicRepository Musics { get; }
+    public IPlaylistRepository Playlists { get; }
 
-    public UnitOfWork(AppDbContext context,
+    public UnitOfWork(
+        AppDbContext context,
         IUserRepository users,
-        IMusicRepository musics)
+        IMusicRepository musics,
+        IPlaylistRepository playlists)
     {
         _context = context;
         Users = users;
         Musics = musics;
+        Playlists = playlists;
     }
 
     public async Task<int> CommitAsync() =>
         await _context.SaveChangesAsync();
 
     public async Task RollbackAsync() =>
-        await Task.CompletedTask; // EF Core não tem rollback explícito sem transação
+        await Task.CompletedTask;
 
     public void Dispose() => _context.Dispose();
 }
