@@ -1,3 +1,5 @@
+using Audiora.Domain.Interfaces;
+
 namespace Audiora.Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable
