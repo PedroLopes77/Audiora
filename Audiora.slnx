@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Audiora.API/Audiora.API.csproj" />
+    <Project Path="src/Audiora.Application/Audiora.Application.csproj" />
+    <Project Path="src/Audiora.Domain/Audiora.Domain.csproj" />
+    <Project Path="src/Audiora.Infrastructure/Audiora.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Audiora.Tests/Audiora.Tests.csproj" />
+  </Folder>
+</Solution>
