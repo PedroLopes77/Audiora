@@ -39,6 +39,12 @@ public static class DependencyInjection
         services.AddScoped<IPlaylistService, PlaylistService>();
         services.AddScoped<IStorageService, StorageService>();
 
+        services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+        services.AddScoped<IHistoryRepository, HistoryRepository>();
+        services.AddScoped<IFavoriteService, FavoriteService>();
+        services.AddScoped<IHistoryService, HistoryService>();
+
+
         // JWT
         var jwtSettings = configuration.GetSection("JwtSettings");
         var secretKey = jwtSettings["SecretKey"]!;

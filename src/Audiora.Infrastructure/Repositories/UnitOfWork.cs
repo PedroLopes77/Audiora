@@ -10,17 +10,23 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository Users { get; }
     public IMusicRepository Musics { get; }
     public IPlaylistRepository Playlists { get; }
+    public IFavoriteRepository Favorites { get; }
+    public IHistoryRepository Histories { get; }
 
     public UnitOfWork(
         AppDbContext context,
         IUserRepository users,
         IMusicRepository musics,
-        IPlaylistRepository playlists)
+        IPlaylistRepository playlists,
+        IFavoriteRepository favorites,
+        IHistoryRepository histories)
     {
         _context = context;
         Users = users;
         Musics = musics;
         Playlists = playlists;
+        Favorites = favorites;
+        Histories = histories;
     }
 
     public async Task<int> CommitAsync() =>
