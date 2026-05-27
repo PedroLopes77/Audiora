@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  audiora-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: audiora-api
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=audiora-db;Database=AudioraDB;User Id=sa;Password=Audiora@2024!;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - JwtSettings__SecretKey=AudioraPlatformSuperSecretKey2024!@#$%
+      - JwtSettings__Issuer=Audiora.API
+      - JwtSettings__Audience=Audiora.Clients
+      - JwtSettings__ExpirationHours=24
+      - StorageSettings__BaseUrl=http://localhost:5003
+    volumes:
+      - audiora-uploads:/app/Uploads
+      - audiora-logs:/app/logs
+    depends_on:
+      audiora-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  audiora-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: audiora-sqlserver
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Audiora@2024!
+      - MSSQL_PID=Express
+    volumes:
+      - audiora-sqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Audiora@2024! -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  audiora-sqldata:
+  audiora-uploads:
+  audiora-logs:

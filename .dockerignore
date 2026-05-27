@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/.git/
+**/logs/
+**/Uploads/
+**/*.user
+**/.vs/
+**/appsettings.Production.json
