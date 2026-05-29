@@ -1,0 +1,53 @@
+name: Audiora CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-api:
+    name: Build & Test API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependências
+        run: dotnet restore Audiora.slnx
+
+      - name: Build
+        run: dotnet build Audiora.slnx --no-restore --configuration Release
+
+      - name: Executar testes
+        run: dotnet test Audiora.slnx --no-build --configuration Release --verbosity normal
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build Android Debug
+        run: |
+          cd src/AudioraApp
+          chmod +x gradlew
+          ./gradlew assembleDebug
