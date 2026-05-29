@@ -1,0 +1,64 @@
+<Window x:Class="Audiora.Admin.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Audiora Admin — Login"
+        Height="500" Width="420"
+        WindowStartupLocation="CenterScreen"
+        Background="#121212"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" Margin="48,0">
+
+            <!-- Logo -->
+            <TextBlock Text="🎵 AUDIORA"
+                       Foreground="#1DB954"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,8"/>
+
+            <TextBlock Text="Painel Administrativo"
+                       Foreground="#B3B3B3"
+                       FontSize="13"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,40"/>
+
+            <!-- Email -->
+            <TextBlock Text="Email" Foreground="#B3B3B3" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox x:Name="TxtEmail"
+                     Style="{StaticResource DarkTextBox}"
+                     Margin="0,0,0,16"/>
+
+            <!-- Senha -->
+            <TextBlock Text="Senha" Foreground="#B3B3B3" FontSize="12" Margin="0,0,0,4"/>
+            <PasswordBox x:Name="TxtPassword"
+                         Style="{StaticResource DarkPasswordBox}"
+                         Margin="0,0,0,24"/>
+
+            <!-- Erro -->
+            <TextBlock x:Name="TxtError"
+                       Foreground="#E53935"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,12"
+                       Visibility="Collapsed"/>
+
+            <!-- Botão -->
+            <Button x:Name="BtnLogin"
+                    Content="ENTRAR"
+                    Style="{StaticResource PrimaryButton}"
+                    Click="BtnLogin_Click"/>
+
+            <!-- Loading -->
+            <TextBlock x:Name="TxtLoading"
+                       Text="Aguarde..."
+                       Foreground="#1DB954"
+                       FontSize="12"
+                       HorizontalAlignment="Center"
+                       Margin="0,12,0,0"
+                       Visibility="Collapsed"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Audiora.Admin/Audiora.Admin.csproj" />
     <Project Path="src/Audiora.API/Audiora.API.csproj" />
     <Project Path="src/Audiora.Application/Audiora.Application.csproj" />
     <Project Path="src/Audiora.Domain/Audiora.Domain.csproj" />
