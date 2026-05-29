@@ -34,8 +34,8 @@ cd src/Audiora.API
 dotnet run
 \`\`\`
 
-A API estará disponível em: https://localhost:5001
-Swagger: https://localhost:5001/swagger
+A API estará disponível em: https://localhost:5003
+Swagger: https://localhost:5003/swagger
 
 ## 📁 Estrutura
 \`\`\`
