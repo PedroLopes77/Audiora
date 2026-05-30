@@ -30,6 +30,9 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IMusicRepository, MusicRepository>();
         services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+        services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+        services.AddScoped<IHistoryRepository, HistoryRepository>();
+        services.AddScoped<IArtistRepository, ArtistRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Services
@@ -38,12 +41,8 @@ public static class DependencyInjection
         services.AddScoped<IMusicService, MusicService>();
         services.AddScoped<IPlaylistService, PlaylistService>();
         services.AddScoped<IStorageService, StorageService>();
-
-        services.AddScoped<IFavoriteRepository, FavoriteRepository>();
-        services.AddScoped<IHistoryRepository, HistoryRepository>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IHistoryService, HistoryService>();
-
 
         // JWT
         var jwtSettings = configuration.GetSection("JwtSettings");

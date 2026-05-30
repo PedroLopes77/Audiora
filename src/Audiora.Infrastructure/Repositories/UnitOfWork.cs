@@ -12,6 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IPlaylistRepository Playlists { get; }
     public IFavoriteRepository Favorites { get; }
     public IHistoryRepository Histories { get; }
+    public IArtistRepository Artists { get; }
 
     public UnitOfWork(
         AppDbContext context,
@@ -19,7 +20,8 @@ public class UnitOfWork : IUnitOfWork
         IMusicRepository musics,
         IPlaylistRepository playlists,
         IFavoriteRepository favorites,
-        IHistoryRepository histories)
+        IHistoryRepository histories,
+        IArtistRepository artists)
     {
         _context = context;
         Users = users;
@@ -27,13 +29,10 @@ public class UnitOfWork : IUnitOfWork
         Playlists = playlists;
         Favorites = favorites;
         Histories = histories;
+        Artists = artists;
     }
 
-    public async Task<int> CommitAsync() =>
-        await _context.SaveChangesAsync();
-
-    public async Task RollbackAsync() =>
-        await Task.CompletedTask;
-
+    public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
+    public async Task RollbackAsync() => await Task.CompletedTask;
     public void Dispose() => _context.Dispose();
 }

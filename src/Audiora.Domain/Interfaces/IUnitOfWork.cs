@@ -7,6 +7,7 @@ public interface IUnitOfWork : IDisposable
     IPlaylistRepository Playlists { get; }
     IFavoriteRepository Favorites { get; }
     IHistoryRepository Histories { get; }
+    IArtistRepository Artists { get; }
     Task<int> CommitAsync();
     Task RollbackAsync();
 }

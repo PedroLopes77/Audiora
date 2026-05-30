@@ -3,6 +3,7 @@ using Audiora.Application.DTOs.Request;
 using Audiora.Application.DTOs.Response;
 using Audiora.Application.Interfaces;
 using Audiora.Domain.Entities;
+using Audiora.Domain.Enums;
 using Audiora.Domain.Interfaces;
 using AutoMapper;
 
@@ -24,15 +25,13 @@ public class AuthService : IAuthService
     public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request)
     {
         var user = await _unitOfWork.Users.GetByEmailAsync(request.Email.ToLower());
-
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            return Result<AuthResponse>.Fail("Email ou senha inválidos.", "INVALID_CREDENTIALS");
+            return Result<AuthResponse>.Fail("Email ou senha invalidos.", "INVALID_CREDENTIALS");
 
         if (!user.IsActive)
             return Result<AuthResponse>.Fail("Conta desativada.", "ACCOUNT_DISABLED");
 
         var token = _tokenService.GenerateToken(user);
-
         return Result<AuthResponse>.Ok(new AuthResponse
         {
             Token = token,
@@ -47,7 +46,7 @@ public class AuthService : IAuthService
     public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request)
     {
         if (await _unitOfWork.Users.EmailExistsAsync(request.Email.ToLower()))
-            return Result<AuthResponse>.Fail("Email já cadastrado.", "EMAIL_EXISTS");
+            return Result<AuthResponse>.Fail("Email ja cadastrado.", "EMAIL_EXISTS");
 
         var user = new User
         {
@@ -55,14 +54,26 @@ public class AuthService : IAuthService
             Email = request.Email.ToLower(),
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             BirthDate = request.BirthDate,
-            Country = request.Country
+            Country = request.Country,
+            Role = request.Role
         };
 
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.CommitAsync();
 
-        var token = _tokenService.GenerateToken(user);
+        if (user.Role == UserRole.Artist)
+        {
+            var artist = new Artist
+            {
+                Name = user.Name,
+                Country = user.Country,
+                UserId = user.Id
+            };
+            await _unitOfWork.Artists.AddAsync(artist);
+            await _unitOfWork.CommitAsync();
+        }
 
+        var token = _tokenService.GenerateToken(user);
         return Result<AuthResponse>.Ok(new AuthResponse
         {
             Token = token,
@@ -77,9 +88,8 @@ public class AuthService : IAuthService
     public async Task<Result<UserResponse>> GetProfileAsync(Guid userId)
     {
         var user = await _unitOfWork.Users.GetWithSubscriptionAsync(userId);
-
         if (user == null)
-            return Result<UserResponse>.Fail("Usuário não encontrado.", "NOT_FOUND");
+            return Result<UserResponse>.Fail("Usuario nao encontrado.", "NOT_FOUND");
 
         return Result<UserResponse>.Ok(_mapper.Map<UserResponse>(user));
     }

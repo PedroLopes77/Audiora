@@ -82,11 +82,7 @@ public class MusicService : IMusicService
 
     public async Task<Result<MusicResponse>> CreateAsync(CreateMusicRequest request, Guid artistUserId)
     {
-        var artist = await _unitOfWork.Musics
-            .Query()
-            .Select(m => m.Artist)
-            .Where(a => a.UserId == artistUserId)
-            .FirstOrDefaultAsync();
+        var artist = await _unitOfWork.Artists.GetByUserIdAsync(artistUserId);
 
         if (artist == null)
             return Result<MusicResponse>.Fail("Artista não encontrado.", "NOT_FOUND");
